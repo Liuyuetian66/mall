@@ -1,0 +1,11 @@
+# 统一换行符：仓库内一律 LF，Windows 检出也保持 LF（Java/YAML 更安全）
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 二进制文件不做转换
+*.png binary
+*.jpg binary
+*.jar binary
+*.gz binary

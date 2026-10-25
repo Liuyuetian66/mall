@@ -1,0 +1,90 @@
+# ============================================================
+# 本地开发基础设施
+# 启动：docker compose up -d
+# 查看：docker compose ps
+# 停止：docker compose down          （保留数据）
+# 清库：docker compose down -v       （删除数据卷，慎用）
+# ============================================================
+name: mall
+
+services:
+  mysql:
+    image: mysql:8.0.36
+    container_name: mall-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-mall123456}
+      MYSQL_DATABASE: mall
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+08:00
+      - --max-connections=1000
+      - --innodb-buffer-pool-size=512M
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mall-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: mall-redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-mall123456}
+      TZ: Asia/Shanghai
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --requirepass
+      - ${REDIS_PASSWORD:-mall123456}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - mall-redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ---- 图形化工具（可选，需要时取消注释）----
+  # adminer:
+  #   image: adminer:latest
+  #   container_name: mall-adminer
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+
+  # ---- M5 微服务阶段再启用 ----
+  # nacos:
+  #   image: nacos/nacos-server:v2.3.2
+  #   container_name: mall-nacos
+  #   environment:
+  #     MODE: standalone
+  #   ports:
+  #     - "8848:8848"
+  #     - "9848:9848"
+
+  # ---- M4 异步阶段再启用 ----
+  # rocketmq-namesrv:
+  #   image: apache/rocketmq:5.3.0
+  #   container_name: mall-rocketmq-namesrv
+  #   command: sh mqnamesrv
+  #   ports:
+  #     - "9876:9876"
+
+volumes:
+  mall-mysql-data:
+  mall-redis-data:

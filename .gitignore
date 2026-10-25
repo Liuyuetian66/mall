@@ -1,0 +1,31 @@
+# ---- Maven ----
+target/
+!.mvn/wrapper/maven-wrapper.jar
+release.properties
+dependency-reduced-pom.xml
+
+# ---- IDE ----
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+.factorypath
+
+# ---- 运行时产物 ----
+logs/
+*.log
+*.log.gz
+
+# ---- 本地环境 ----
+.env
+.env.local
+docker/volumes/
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+desktop.ini
