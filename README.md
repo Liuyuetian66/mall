@@ -30,7 +30,8 @@ mall/
 ├── docker-compose.yml          # 本地基础设施：MySQL + Redis
 ├── .env.example                # 环境变量样例
 ├── docs/
-│   └── day1.md                 # Day 1 验收清单
+│   ├── day1.md                 # Day 1 验收清单
+│   └── day1-tech-design.md     # Day 1 技术设计文档
 ├── mall-common/                # 通用层（被所有业务模块依赖）
 │   └── com.mall.common
 │       ├── api/                # Result / ResultCode / PageResult
@@ -47,6 +48,15 @@ mall/
         ├── application-dev.yml
         └── logback-spring.xml
 ```
+
+---
+
+## 文档索引
+
+| 文档 | 内容 |
+|---|---|
+| [Day 1 技术设计文档](docs/day1-tech-design.md) | 架构设计、统一响应/错误码/异常/traceId 方案、接口契约、配置、测试验收 |
+| [Day 1 验收清单](docs/day1.md) | 逐步验收命令与预期结果、排障表 |
 
 ---
 
