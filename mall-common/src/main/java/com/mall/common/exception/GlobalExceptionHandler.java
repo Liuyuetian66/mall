@@ -128,7 +128,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private String resolveMessage(Exception ex) {
         if (ex instanceof NoResourceFoundException resourceEx) {
-            return "接口不存在: " + resourceEx.getResourcePath();
+            String path = resourceEx.getResourcePath();
+            return "接口不存在: " + (path.startsWith("/") ? path : "/" + path);
         }
         if (ex instanceof NoHandlerFoundException handlerEx) {
             return "接口不存在: " + handlerEx.getRequestURL();

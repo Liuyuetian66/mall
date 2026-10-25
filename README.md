@@ -109,7 +109,8 @@ curl.exe http://localhost:8081/ping
     "profile": "dev"
   },
   "traceId": "18f3a1b2c3d_9a1f2b3c4d5e6f70",
-  "timestamp": 1729871234567
+  "timestamp": 1729871234567,
+  "success": true
 }
 ```
 
@@ -205,6 +206,20 @@ docker compose logs -f mysql
 **4. 启动报 `Unsupported class file major version`**
 
 说明 Maven 用的不是 JDK 21。检查 `mvn -v` 输出的 Java version，并设置 `JAVA_HOME` 指向 JDK 21。
+
+本机现状（Windows）：JDK 21 装在 `C:\Program Files\Java\jdk-21.0.12`，但 `JAVA_HOME` 仍指向 JDK 8，
+直接跑 `mvn` 会用 Java 8 编译并失败。两种处理方式：
+
+```powershell
+# 方式一：只在当前窗口生效
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-21.0.12"
+$env:Path = "$env:JAVA_HOME\bin;$env:Path"
+
+# 方式二：永久写入用户环境变量（需重开终端）
+[Environment]::SetEnvironmentVariable("JAVA_HOME", "C:\Program Files\Java\jdk-21.0.12", "User")
+```
+
+设置后用 `mvn -v` 确认输出 `Java version: 21.0.12`。
 
 **5. `/ping` 返回 404**
 
