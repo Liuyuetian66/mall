@@ -1,21 +1,33 @@
+# ============================================================
+# 商品服务主配置（各环境共用）
+# 环境差异（数据库、日志级别等）放在 application-{profile}.yml
+# 启动时用 --spring.profiles.active=prod 覆盖，不要在代码里写死
+# ============================================================
+
 server:
   port: 8081
-  shutdown: graceful          # 优雅停机：等待处理中的请求完成
+  # 优雅停机：收到停机信号后先停止接收新请求，等待处理中的请求完成
+  shutdown: graceful
   tomcat:
+    # 工作线程数上限，后续按压测结果调整（默认 200）
     threads:
-      max: 200                # 工作线程数，后续按压测结果调整
+      max: 200
       min-spare: 10
+    # 等待队列长度，超过后直接拒绝，避免请求无限堆积
     accept-count: 200
     connection-timeout: 5s
 
 spring:
   application:
     name: mall-product
+  # 默认激活 dev；生产环境务必用命令行参数覆盖
   profiles:
-    active: dev               # 生产环境用 --spring.profiles.active=prod 覆盖
+    active: dev
   lifecycle:
+    # 配合 graceful，最多等 30 秒让存量请求处理完
     timeout-per-shutdown-phase: 30s
   jackson:
+    # 统一时区与时间格式，避免前后端时间相差 8 小时
     time-zone: Asia/Shanghai
     date-format: yyyy-MM-dd HH:mm:ss
     serialization:
@@ -23,15 +35,19 @@ spring:
       fail-on-empty-beans: false
   mvc:
     problemdetails:
-      enabled: false          # 统一用自定义 Result，不启用 RFC 7807
+      # 统一用自定义 Result，不使用 RFC 7807 的 ProblemDetail 结构
+      enabled: false
 
+# ---------------- 监控与健康检查 ----------------
 management:
   endpoints:
     web:
       exposure:
+        # 只暴露必要端点，生产环境不要开 *，避免泄露内部信息
         include: health,info,metrics
   endpoint:
     health:
+      # 展示各组件健康明细，便于排障；生产环境可按需改为 never
       show-details: always
   info:
     env:
@@ -43,6 +59,7 @@ info:
     version: 1.0.0-SNAPSHOT
     description: 电商平台 - 商品服务
 
+# ---------------- 日志（appender 配置见 logback-spring.xml） ----------------
 logging:
   level:
     root: INFO

@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- 继承父工程，统一依赖版本 -->
     <parent>
         <groupId>com.mall</groupId>
         <artifactId>mall-parent</artifactId>
@@ -15,16 +16,22 @@
     <description>通用基础设施：统一响应、异常、traceId、工具类</description>
 
     <dependencies>
-        <!-- 通用层需要 Web 相关能力（过滤器、异常处理），由使用方传递依赖 -->
+        <!--
+          通用层需要 Web 能力：TraceIdFilter、@RestControllerAdvice、ResponseEntity 等。
+          以 compile 范围暴露，业务模块引入 mall-common 后自动获得，无需重复声明。
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- 参数校验：@NotBlank 等注解，以及全局异常里的 ConstraintViolationException -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- Lombok：optional=true 表示不传递给依赖方，仅本模块编译期使用 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

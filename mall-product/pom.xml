@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- 继承父工程，统一依赖版本 -->
     <parent>
         <groupId>com.mall</groupId>
         <artifactId>mall-parent</artifactId>
@@ -15,20 +16,25 @@
     <description>商品服务</description>
 
     <dependencies>
+        <!-- 通用能力：统一响应、异常处理、traceId（版本由父 POM 的 dependencyManagement 管理） -->
         <dependency>
             <groupId>com.mall</groupId>
             <artifactId>mall-common</artifactId>
         </dependency>
 
+        <!-- Web 容器 + Spring MVC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- 健康检查与指标：/actuator/health、/actuator/metrics -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!-- 测试：JUnit 5 + MockMvc + AssertJ，仅测试期生效 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -37,8 +43,10 @@
     </dependencies>
 
     <build>
+        <!-- 固定产物名，方便脚本与 Dockerfile 引用 -->
         <finalName>mall-product</finalName>
         <plugins>
+            <!-- 打成可执行 fat jar（含内嵌 Tomcat），用 java -jar 直接运行 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
