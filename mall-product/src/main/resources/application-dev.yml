@@ -12,7 +12,8 @@ logging:
 #spring:
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://127.0.0.1:3306/mall?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+#    注意：本机原生 MySQL 占用 3306，Docker 版映射在 3307（见 mall/.env）
+#    url: jdbc:mysql://127.0.0.1:3307/mall?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
 #    username: root
 #    password: ${MYSQL_ROOT_PASSWORD:mall123456}
 #    hikari:
@@ -23,7 +24,7 @@ logging:
 #  data:
 #    redis:
 #      host: 127.0.0.1
-#      port: 6379
+#      port: 6380   # 本机原生 Redis 占用 6379，Docker 版映射在 6380
 #      password: ${REDIS_PASSWORD:mall123456}
 #      database: 0
 #      timeout: 2000ms
