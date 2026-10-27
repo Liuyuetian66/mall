@@ -1,10 +1,9 @@
 package com.mall.product.controller;
 
+import com.mall.product.AbstractIntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -14,11 +13,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Day 1 验收测试：统一响应、traceId、异常处理三条主干链路。
- * <p>启动项目后也可用 docs/day1.md 里的 curl 命令手工验证。
+ *
+ * <p>继承 {@link AbstractIntegrationTest} 后，上下文会额外加载数据库与 Flyway，
+ * 但本类用例本身不依赖任何表数据。
  */
-@SpringBootTest
-@AutoConfigureMockMvc
-class PingControllerTest {
+class PingControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

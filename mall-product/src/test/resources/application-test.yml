@@ -1,0 +1,22 @@
+# ============================================================
+# 集成测试专用配置（profile = test）
+# ------------------------------------------------------------
+# 与开发库隔离：使用独立的 mall_test 库，
+#   createDatabaseIfNotExist=true 让首次连接时自动建库，
+#   之后由 Flyway 建表并灌入种子数据。
+# 前置条件：Docker 里的 MySQL 已启动（端口 3307，见 .env）
+# ============================================================
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3307/mall_test?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: root
+    password: ${MYSQL_ROOT_PASSWORD:mall123456}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 3000
+
+logging:
+  level:
+    com.mall: INFO
